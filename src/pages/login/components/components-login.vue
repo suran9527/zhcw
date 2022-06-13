@@ -36,7 +36,8 @@
       </t-form-item>
 
       <div class="check-container remember-pwd" >
-        <t-checkbox v-model="formData.checked">记住账号</t-checkbox>
+<!--选择器-->
+<!--        <t-checkbox v-model="formData.checked">记住账号</t-checkbox>-->
 <!--        <span class="tip">忘记账号？</span>-->
       </div>
     </template>
@@ -87,16 +88,23 @@ import Vue from 'vue';
 import QrcodeVue from 'qrcode.vue';
 import { TOKEN } from '@/config/global';
 import { UserIcon, LockOnIcon, BrowseOffIcon, BrowseIcon, RefreshIcon } from 'tdesign-icons-vue';
+import {
+  rsaEncrypt,
+  rsaDecrypt
+} from '@/utils/rsa.js'
+import {
+  getPrivateKey,
+  getPublicKey,
+} from "@/api/home";
 // let token = localStorage.getItem('token')
 // console.log(token)
 const INITIAL_DATA = {
   phone: '',
-  account: 'admin',
-  password: '123456',
+  account: '',
+  password: '',
   verifyCode: '',
   checked: false,
 };
-
 const FORM_RULES = {
   // phone: [{ required: true, message: '手机号必填', type: 'error' }],
   account: [{ required: false, message: '账号必填', type: 'error' }],
@@ -125,6 +133,19 @@ export default Vue.extend({
 
     };
   },
+  created(){
+    if(localStorage.getItem('userAdmin')){
+      let form =JSON.parse(localStorage.getItem('userAdmin'));
+      let password = form.password
+      getPrivateKey().then(key=>{
+        let MSG = rsaDecrypt(password, key.data)
+        console.log(rsaDecrypt(password,key.data))
+        // console.log(rsaDecrypt(form.password,key.data))
+        // form.password=rsaDecrypt(form.password,key.data)
+
+      })
+    }
+  },
   beforeDestroy() {
     clearInterval(this.intervalTimer);
   },
@@ -137,6 +158,21 @@ export default Vue.extend({
       if (validateResult === true) {
         this.$store.dispatch('user/login', this.formData).then(res=>{
           if(res.code==200){
+            //测试记住账号
+            // if(this.formData.checked){
+            //   getPublicKey().then(key=>{
+            //     this.formData.password = rsaEncrypt(this.formData.password,key.data)
+            //     getPrivateKey().then(res=>{
+            //
+            //       let MSG = rsaDecrypt(this.formData.password, res.data)
+            //       console.log(MSG)
+            //       // console.log(rsaDecrypt(form.password,key.data))
+            //       // form.password=rsaDecrypt(form.password,key.data)
+            //     })
+            //     console.log(this.formData.password)
+            //     localStorage.setItem('userAdmin', JSON.stringify(this.formData))
+            //   })
+            // }
             localStorage.setItem(TOKEN,res.data)
             this.$message.success('登录成功');
             this.$router.replace('/dashboard/home').catch(() => '');
