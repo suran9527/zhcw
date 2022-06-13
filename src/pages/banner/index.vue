@@ -35,7 +35,7 @@
       <t-col :span="2">
         <h2>banner管理</h2>
       </t-col>
-      <t-col :span="2" :offset="6" style="width: 100%;display:flex;justify-content: flex-end">
+      <t-col :span="2" :offset="8" style="width: 100%;display:flex;justify-content: flex-end">
         <t-button theme="primary" @click="visible1=true">
           <icon name="add" style="height:100%"/>
           添加Banner

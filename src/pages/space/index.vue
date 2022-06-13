@@ -58,19 +58,19 @@
       <t-col :span="2">
         <h2>建言献策</h2>
       </t-col>
-      <t-col :span="2" :offset="6" style="width: 100%;display:flex;justify-content: flex-end"></t-col>
-      <t-col :span="2" v-if="false">
-        <t-input
-          v-model="search"
-          :clearable="true"
-          placeholder="请输入搜索内容"
-          :onChange="searchChange"
-        >
-          <template #prefix-icon>
-            <icon name="search"/>
-          </template>
-        </t-input>
-      </t-col>
+      <t-col :span="2" :offset="8" style="width: 100%;display:flex;justify-content: flex-end"></t-col>
+<!--      <t-col :span="2" v-if="false">-->
+<!--        <t-input-->
+<!--          v-model="search"-->
+<!--          :clearable="true"-->
+<!--          placeholder="请输入搜索内容"-->
+<!--          :onChange="searchChange"-->
+<!--        >-->
+<!--          <template #prefix-icon>-->
+<!--            <icon name="search"/>-->
+<!--          </template>-->
+<!--        </t-input>-->
+<!--      </t-col>-->
     </t-row>
     <t-row v-if="loading">
       <t-col :span="2" :offset="5">

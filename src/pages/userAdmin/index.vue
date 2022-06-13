@@ -34,18 +34,18 @@
           添加用户
         </t-button>
       </t-col>
-      <t-col :span="2" :offset="8">
-        <t-input
-          v-model="search"
-          :clearable="true"
-          placeholder="请输入搜索内容"
-          :onChange="searchChange"
-        >
-          <template #prefix-icon>
-            <icon name="search"/>
-          </template>
-        </t-input>
-      </t-col>
+<!--      <t-col :span="2" :offset="8">-->
+<!--        <t-input-->
+<!--          v-model="search"-->
+<!--          :clearable="true"-->
+<!--          placeholder="请输入搜索内容"-->
+<!--          :onChange="searchChange"-->
+<!--        >-->
+<!--          <template #prefix-icon>-->
+<!--            <icon name="search"/>-->
+<!--          </template>-->
+<!--        </t-input>-->
+<!--      </t-col>-->
     </t-row>
     <t-row>
       <t-col :span="12">

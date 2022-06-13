@@ -20,7 +20,7 @@
           <search v-if="layout !== 'side'" :layout="layout" />
 
           <!-- 全局通知 -->
-          <notice />
+<!--          <notice />-->
 
           <t-tooltip v-if="false" placement="bottom" content="代码仓库">
             <t-button theme="default" shape="square" variant="text" @click="navToGitHub">
@@ -35,9 +35,9 @@
           <t-dropdown :min-column-width="125" trigger="click">
             <template #dropdown>
               <t-dropdown-menu>
-                <t-dropdown-item class="operations-dropdown-container-item" @click="handleNav('/user/index')">
-                  <user-circle-icon />个人中心
-                </t-dropdown-item>
+<!--                <t-dropdown-item class="operations-dropdown-container-item" @click="handleNav('/user/index')">-->
+<!--                  <user-circle-icon />个人中心-->
+<!--                </t-dropdown-item>-->
                 <t-dropdown-item class="operations-dropdown-container-item" @click="handleLogout">
                   <poweroff-icon />退出登录
                 </t-dropdown-item>

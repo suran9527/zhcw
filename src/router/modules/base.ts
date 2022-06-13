@@ -48,12 +48,12 @@ export default [
         component: () => import('@/pages/notice/index.vue'),
         meta: { title: '通知管理' },
       },
-      {
-        path: 'examine',
-        name: 'Examine',
-        component: () => import('@/pages/dashboard/examine/index.vue'),
-        meta: { title: '审核管理' },
-      },
+      // {
+      //   path: 'examine',
+      //   name: 'Examine',
+      //   component: () => import('@/pages/dashboard/examine/index.vue'),
+      //   meta: { title: '审核管理' },
+      // },
     ],
   },
 ];

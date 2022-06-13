@@ -330,6 +330,11 @@
         this.btnShow = value.length == 0 ? false : true
       },
       searchChange(value) {
+        if(value==''){
+          this.getVillagerList()
+        }else{
+          this.searchVillager(value)
+        }
         console.log(value)
       },
       change(value,e){
@@ -386,6 +391,40 @@
           }else{
             this.$message.error({ content: res.msg, duration: 2000 })
           }
+        })
+      },
+      searchVillager(data){
+        this.loading=true
+        getPrivateKey().then(key => {
+          getVillagerList({
+            pages: 1,
+            limit: 9999,
+            words: data
+          }).then(res => {
+            this.pagination.total = res.data.count
+            let data = res.data.data
+            for (let i in data) {
+              let id = ''
+              let aes_key = ''
+              let relation = ''
+              for (let j in data[i]) {
+                j == 'aes_key' ? aes_key = data[i][j] : ''
+                j == 'id' ? id = data[i][j] : ''
+                // j == 'relation' ? relation = this.data[i][j] : ''
+              }
+              let MSG = rsaDecrypt(aes_key, key.data)
+              // if (relation) {
+              //   this.data[i].relation = AES.decrypt(relation, MSG).substr(1, 18)
+              // }
+              // console.log(AES.decrypt(relation,MSG))
+              data[i].id = JSON.parse(JSON.parse(JSON.stringify(AES.decrypt(id, MSG))))
+              data[i].age = getAnalysisIdCard(data[i].id, 3)
+              // console.log(AES.decrypt(id,MSG))
+            }
+            // this.pagination.total=100
+            this.data = data
+            this.loading = false
+          })
         })
       },
       deleteData(data) {

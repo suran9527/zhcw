@@ -89,42 +89,42 @@ export default[
       },
     ],
   },
-  {
-    path: '/user',
-    name: 'user',
-    component: Layout,
-    redirect: '/user/index',
-    meta: { title: '个人页', icon: 'user-circle' },
-    children: [
-      {
-        path: 'index',
-        name: 'UserIndex',
-        component: () => import('@/pages/user/index.vue'),
-        meta: { title: '个人中心' },
-      },
-    ],
-  },
-  {
-    path: '/applet',
-    name: 'applet',
-    component: Layout,
-    redirect: '/applet/applet',
-    meta: { title: '小程序弹窗', icon: MobileIcon },
-    children: [
-      {
-        path: 'applet',
-        name: 'Applet',
-        component: () => import('@/pages/applet/index.vue'),
-        meta: { title: '弹窗管理' },
-      },
-      // {
-      //   path: 'step',
-      //   name: 'FormStep',
-      //   component: () => import('@/pages/form/step/index.vue'),
-      //   meta: { title: '分步表单页' },
-      // },
-    ],
-  },
+  // {
+  //   path: '/user',
+  //   name: 'user',
+  //   component: Layout,
+  //   redirect: '/user/index',
+  //   meta: { title: '个人页', icon: 'user-circle' },
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       name: 'UserIndex',
+  //       component: () => import('@/pages/user/index.vue'),
+  //       meta: { title: '个人中心' },
+  //     },
+  //   ],
+  // },
+  // {
+  //   path: '/applet',
+  //   name: 'applet',
+  //   component: Layout,
+  //   redirect: '/applet/applet',
+  //   meta: { title: '小程序弹窗', icon: MobileIcon },
+  //   children: [
+  //     {
+  //       path: 'applet',
+  //       name: 'Applet',
+  //       component: () => import('@/pages/applet/index.vue'),
+  //       meta: { title: '弹窗管理' },
+  //     },
+  //     // {
+  //     //   path: 'step',
+  //     //   name: 'FormStep',
+  //     //   component: () => import('@/pages/form/step/index.vue'),
+  //     //   meta: { title: '分步表单页' },
+  //     // },
+  //   ],
+  // },
   // {
   //   path: '/result',
   //   name: 'result',

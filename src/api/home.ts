@@ -34,6 +34,7 @@ export function getVillagerInfo(data) {
   });
 }
 
+
 export function addVillager(data) {
   return request({
     method: 'post',
