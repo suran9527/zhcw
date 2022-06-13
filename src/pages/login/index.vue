@@ -1,6 +1,6 @@
 <template>
   <div class="login-wrapper">
-    <div class="bg"></div>
+    <div class="loginbg"></div>
     <login-header />
     <div class="loginBox">
       <div class="left">
