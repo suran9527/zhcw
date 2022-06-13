@@ -37,7 +37,7 @@
 
       <div class="check-container remember-pwd" >
 <!--选择器-->
-<!--        <t-checkbox v-model="formData.checked">记住账号</t-checkbox>-->
+        <t-checkbox v-model="formData.checked">记住账号</t-checkbox>
 <!--        <span class="tip">忘记账号？</span>-->
       </div>
     </template>
@@ -88,14 +88,7 @@ import Vue from 'vue';
 import QrcodeVue from 'qrcode.vue';
 import { TOKEN } from '@/config/global';
 import { UserIcon, LockOnIcon, BrowseOffIcon, BrowseIcon, RefreshIcon } from 'tdesign-icons-vue';
-import {
-  rsaEncrypt,
-  rsaDecrypt
-} from '@/utils/rsa.js'
-import {
-  getPrivateKey,
-  getPublicKey,
-} from "@/api/home";
+import AES from '@/utils/cpy.js'
 // let token = localStorage.getItem('token')
 // console.log(token)
 const INITIAL_DATA = {
@@ -104,6 +97,7 @@ const INITIAL_DATA = {
   password: '',
   verifyCode: '',
   checked: false,
+  aes_key:''
 };
 const FORM_RULES = {
   // phone: [{ required: true, message: '手机号必填', type: 'error' }],
@@ -130,20 +124,16 @@ export default Vue.extend({
       showPsw: false,
       countDown: 0,
       intervalTimer: null,
-
+      key:''
     };
   },
   created(){
     if(localStorage.getItem('userAdmin')){
       let form =JSON.parse(localStorage.getItem('userAdmin'));
       let password = form.password
-      getPrivateKey().then(key=>{
-        let MSG = rsaDecrypt(password, key.data)
-        console.log(rsaDecrypt(password,key.data))
-        // console.log(rsaDecrypt(form.password,key.data))
-        // form.password=rsaDecrypt(form.password,key.data)
-
-      })
+      let key = form.aes_key
+      form.password = JSON.parse(AES.decrypt(password,key));
+      this.formData=form
     }
   },
   beforeDestroy() {
@@ -154,25 +144,31 @@ export default Vue.extend({
       this.type = val;
       this.$refs.form.reset();
     },
+    getKey() {
+      let key = AES.generatekey(16)
+      this.key = key
+    },
+    fuck(data) {
+      var encrypts = AES.encrypt(JSON.stringify(data), this.key);
+      // var dess = JSON.parse(AES.decrypt(encrypts, key));
+      // console.log(encrypts)
+      this.formData.aes_key=this.key
+      console.log(this.formData)
+      return encrypts;
+    },
     async onSubmit({ validateResult }) {
+      let that = this;
       if (validateResult === true) {
         this.$store.dispatch('user/login', this.formData).then(res=>{
           if(res.code==200){
             //测试记住账号
-            // if(this.formData.checked){
-            //   getPublicKey().then(key=>{
-            //     this.formData.password = rsaEncrypt(this.formData.password,key.data)
-            //     getPrivateKey().then(res=>{
-            //
-            //       let MSG = rsaDecrypt(this.formData.password, res.data)
-            //       console.log(MSG)
-            //       // console.log(rsaDecrypt(form.password,key.data))
-            //       // form.password=rsaDecrypt(form.password,key.data)
-            //     })
-            //     console.log(this.formData.password)
-            //     localStorage.setItem('userAdmin', JSON.stringify(this.formData))
-            //   })
-            // }
+            if(this.formData.checked){
+                this.getKey()
+                this.formData.password = this.fuck(this.formData.password)
+                localStorage.setItem('userAdmin', JSON.stringify(this.formData))
+            }else{
+                localStorage.removeItem('userAdmin')
+            }
             localStorage.setItem(TOKEN,res.data)
             this.$message.success('登录成功');
             this.$router.replace('/dashboard/home').catch(() => '');
