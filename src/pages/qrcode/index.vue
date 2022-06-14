@@ -96,9 +96,15 @@ export default {
       // console.log(this.targetValue)
     },
     //切换页面
-    valueChange(value){
-      value==1?this.targetValue=[]:''
-      value==1?this.setList=this.list:this.setList=[]
+    async valueChange(value){
+      if(value==1){
+        let res = await createQrcode()
+        this.setList=res.data;
+      }else{
+        this.targetValue=[]
+      }
+      // ?this.targetValue=[]:''
+      // value==1?this.setList=this.list:this.setList=[]
       console.log(this.setList)
     },
     go(){
