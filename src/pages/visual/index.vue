@@ -38,7 +38,7 @@
           </div>
         </li>
         <li>
-          <div class="bar">
+          <div class="fuck">
             <div class="barbox">
               <ul class="clearfix">
                 <li class="pulll_left counter">{{allPeople}}</li>
