@@ -1,5 +1,5 @@
 <template>
-  <t-card>
+  <t-card class="body">
     <t-dialog
       width="40%"
       :visible.sync="visible"
@@ -26,7 +26,7 @@
       <t-col :span="2">
         <h2>综合信息管理</h2>
       </t-col>
-      <t-col :span="2" :offset="8">
+      <t-col :span="2" :offset="8" v-if="false">
         <t-input
           v-model="search"
           :clearable="true"
@@ -42,13 +42,14 @@
     <t-row>
       <t-col :span="12">
         <t-table
-          :height="maxHeight"
+          :maxHeight="maxHeight"
           rowKey="index"
           hover
           type=multiple
           :data="data"
           :columns="columns"
           :pagination="pagination"
+          :loading="loading"
           @page-change="pageChange"
         >
           <template #operation="slotProps">
@@ -66,7 +67,8 @@
 
 <script>
 import { Icon } from 'tdesign-icons-vue';
-
+import {getList} from "@/api/delSite";
+import {getFieldList} from '@/api/home'
 export default {
   name: 'DashboardBase',
   components: {
@@ -82,82 +84,69 @@ export default {
       visible:false,
       modelColumns: [
         {
-          align: 'center',
-          className: 'row',
-          colKey: 'index',
-          title: '序号',
-          width:100
-        },
-        {
-          colKey: 'platform',
-          title: '平台',
-          ellipsis: true,
-          fixed:'left',
-          width:150
-        },
-        {
-          colKey: 'type',
-          title: '类型',
+          colKey: 'date',
+          title: '删除时间',
           ellipsis: true,
           width:150
         },
         {
-          colKey: 'default',
-          title: '默认值',
+          colKey: 'full_name',
+          title: '姓名',
           ellipsis: true,
-          width:150
+          fixed: 'left',
+          width: 150
         },
         {
-          colKey: 'needed',
-          title: '是否必传',
+          colKey: 'id',
+          title: '身份证',
           ellipsis: true,
-          width:150
+          width: 150
         },
         {
-          colKey: 'table.position',
-          title: '详情信息',
+          colKey: 'role',
+          title: '与户主关系',
           ellipsis: true,
-          width:150
+          width: 150
         },
 
+        {
+          colKey: 'sex',
+          title: '性别',
+          ellipsis: true,
+          width: 150
+        },
+        {
+          colKey: 'live_address',
+          title: '住址',
+          ellipsis: true,
+          width: 150
+        },
       ],
       columns: [
-
         {
           align: 'center',
           className: 'row',
-          colKey: 'index',
-          title: '序号',
+          colKey: 'full_name',
+          title: '姓名',
           width:100
         },
         {
-          colKey: 'platform',
-          title: '平台',
+          colKey: 'sex',
+          title: '性别',
+          ellipsis: true,
+          width:150
+        },
+        {
+          colKey: 'live_address',
+          title: '住址',
           ellipsis: true,
           fixed:'left',
           width:150
         },
+
         {
-          colKey: 'type',
-          title: '类型',
-          ellipsis: true,
-          width:150
-        },
-        {
-          colKey: 'default',
-          title: '默认值',
-          ellipsis: true,
-          width:150
-        },
-        {
-          colKey: 'needed',
-          title: '是否必传',
-          ellipsis: true,
-          width:150
-        },
-        {
-          colKey: 'position',
-          title: '详情信息',
+          colKey: 'date',
+          title: '删除时间',
           ellipsis: true,
           width:150
         },
@@ -171,30 +160,58 @@ export default {
 
     ],
       data:[],
+      loading:false
     }
   },
   created(){
-    for (let i = 0; i < 100; i++) {
-  this.data.push({
-    index: i,
-    platform: i % 2 === 0 ? '共有' : '私有',
-    type: ['String', 'Number', 'Array', 'Object'][i % 4],
-    default: ['-', '0', '[]', '{}'][i % 4],
-      position: `读取 ${i} 个数据的嵌套信息值`,
-    needed: i % 4 === 0 ? '是' : '否',
-    description: '数据源',
-  });
-
-}
+    this.getFieldList()
+    this.getList()
     this.height()
   },
   methods: {
+    getFieldList() {
+
+      // this.data=[]
+      getFieldList({
+        pages: 1,
+        limit: 9999
+      }).then(res => {
+        for (let i in res.data) {
+          this.modelColumns.push({
+            colKey: res.data[i].key,
+            title: res.data[i].val,
+            width: 150,
+            cell: 'operation',
+          })
+        }
+        // this.data=res.data
+        // console.log(res.data)
+        // this.data=res.data
+        // this.pagination.total=100
+      })
+    },
+    getList(){
+      this.loading=true
+      getList({
+        pages:this.pagination.defaultCurrent,
+        limit:this.pagination.defaultPageSize
+      }).then(res=>{
+        console.log(res.data)
+        this.pagination.total=res.count
+        for(let i in res.data){
+          res.data[i] = JSON.parse(res.data[i].data)
+        }
+        this.data=res.data
+        this.loading=false
+      })
+    },
     height() {
       this.maxHeight = window.innerHeight * 0.7
       console.log(this.maxHeight)
     },
     pageChange(index){
-      console.log(index)
+      this.pagination.defaultCurrent=index.current
+      this.getList()
     },
 
     searchChange(value){
@@ -235,6 +252,11 @@ export default {
   }
 };
 </script>
+<style>
+.body {
+  height:calc(100%);
+}
+</style>
 <style scoped>
 .row-container {
   margin-bottom: 16px;

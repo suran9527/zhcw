@@ -34,18 +34,18 @@
           添加用户
         </t-button>
       </t-col>
-<!--      <t-col :span="2" :offset="8">-->
-<!--        <t-input-->
-<!--          v-model="search"-->
-<!--          :clearable="true"-->
-<!--          placeholder="请输入搜索内容"-->
-<!--          :onChange="searchChange"-->
-<!--        >-->
-<!--          <template #prefix-icon>-->
-<!--            <icon name="search"/>-->
-<!--          </template>-->
-<!--        </t-input>-->
-<!--      </t-col>-->
+      <t-col :span="2" :offset="8">
+        <t-input
+          v-model="search"
+          :clearable="true"
+          placeholder="请输入搜索内容"
+          :onChange="searchChange"
+        >
+          <template #prefix-icon>
+            <icon name="search"/>
+          </template>
+        </t-input>
+      </t-col>
     </t-row>
     <t-row>
       <t-col :span="12">
@@ -55,6 +55,7 @@
           hover
           type=multiple
           :data="data"
+          :loading="loading"
           :columns="columns"
           :pagination="pagination"
           @page-change="pageChange"
@@ -77,6 +78,7 @@
 <script>
 import { Icon } from 'tdesign-icons-vue';
 import {getUserList,setUserAuth} from "@/api/user";
+import {searchUserList} from "../../api/user";
 export default {
   name: 'userAdmin',
   components: {
@@ -160,6 +162,7 @@ export default {
 
     ],
       data:[],
+      loading:false
     }
   },
   created(){
@@ -169,7 +172,7 @@ export default {
   },
   methods: {
     updataAuth(data){
-      console.log(data.row)
+
       let authData=''
       if(data.row.auth=='用户'){
         authData='admin'
@@ -190,6 +193,7 @@ export default {
       })
     },
     getUserList(){
+      this.loading=true
       getUserList({
         pages:this.pagination.defaultCurrent,
         limit:this.pagination.defaultPageSize
@@ -199,7 +203,7 @@ export default {
         for(let i in res.data){
           this.data[i].auth=='user'?this.data[i].auth='用户':this.data[i].auth='管理员'
         }
-        console.log(res)
+        this.loading=false
       })
     },
     height() {
@@ -213,7 +217,19 @@ export default {
 
 
     searchChange(value){
-      console.log(value)
+      if(value==''){
+        this.getUserList()
+      }else{
+        this.loading=true
+        searchUserList(value).then(res=>{
+          this.pagination.total=res.count
+          this.data=res.data
+          for(let i in res.data){
+            this.data[i].auth=='user'?this.data[i].auth='用户':this.data[i].auth='管理员'
+          }
+          this.loading=false
+        })
+      }
     },
     deleteData(data){
       console.log(data)

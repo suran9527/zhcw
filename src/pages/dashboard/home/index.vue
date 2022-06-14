@@ -247,7 +247,6 @@
     },
     methods: {
       getFieldList() {
-
         // this.data=[]
         getFieldList({
           pages: 1,

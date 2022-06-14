@@ -17,6 +17,17 @@ export function getUserList(params) {
     params
   });
 }
+export function searchUserList(params) {
+  return request({
+    method: 'get',
+    url: '/get_user_list',
+    params:{
+      pages:1,
+      limit:9999,
+      words:params
+    }
+  });
+}
 export function setUserAuth(data) {
   return request({
     method: 'post',

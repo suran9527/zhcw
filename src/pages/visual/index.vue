@@ -234,11 +234,11 @@ export default {
             }
           },
           data: [{
-            value: v1,
+            value: v2,
             name: '男消费',
             label: {
               normal: {
-                formatter: v1 + '',
+                formatter: v2 + '',
                 textStyle: {
                   fontSize: 20,
                   color: '#fff',
@@ -246,7 +246,7 @@ export default {
               }
             }
           }, {
-            value: v2,
+            value: v1,
             name: '女消费',
             label: {
               normal: {
@@ -302,7 +302,7 @@ export default {
 
         series: [
           {
-            name: 'Rainfall',
+            name: '反对',
             type: 'bar',
             data: oppData,
             itemStyle:{
@@ -319,7 +319,7 @@ export default {
             },
           },
           {
-            name: 'Evaporation',
+            name: '支持',
             type: 'bar',
             data: supData,
             itemStyle:{
